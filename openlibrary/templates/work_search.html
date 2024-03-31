@@ -100,39 +100,40 @@ $ )
 
             $if any(header in param for header, label in facet_map):
                 <p class="collapse darkgray"><span class="tools"><img src="/images/icons/icon_search-facet.png" alt="Search facets" width="11" height="10" style="margin-right:5px;"/><strong>
-                $for header, label in facet_map:
-                    $ counts = search_response.facet_counts[header]
-                    $for k, display, count in counts:
-                        $if k not in param.get(header, []):
-                            $continue
+                $for header, labels in facet_map:
+                    $if header in param:
+                        $for k in param[header]:
+                            $ display = k
+                            $if k not in param.get(header, []):
+                                $continue
 
-                        $if header not in ['has_fulltext', 'public_scan_b']:
-                            $title.append(display)
+                            $if header not in ['has_fulltext', 'public_scan_b']:
+                                $title.append(display)
 
-                        $if header == 'has_fulltext':
-                            $fulltext_names.get(k, '')
-                        $elif header == 'public_scan_b':
-                            $if display == 'true':
-                                <a href="/read" title="$_('Explore Classic eBooks')">$_('Only Classic eBooks')</a>
-                            $else:
-                                Classic eBooks hidden
-                        $elif header == 'subject_facet':
-                            <a href="/subjects/$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
-                        $elif header == 'person_facet':
-                            <a href="/subjects/person:$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
-                        $elif header == 'place_facet':
-                            <a href="/subjects/place:$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
-                        $elif header == 'time_facet':
-                            <a href="/subjects/time:$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
-                        $elif header == 'first_publish_year':
-                            <span title="$_('First published in')">$display</span>
-                        $elif header == 'language':
-                            <span title="$_('Written in')">$display</span>
-                        $elif header == 'publisher_facet':
-                            <span title="$_('Published by')">$display</span>
-                        $elif header == 'author_key':
-                            <span title="$_('Author')">$display</span>
-                        <span style="padding-right:15px;"><a href="$del_facet_url(header, k)" title="$_('Click to remove this facet')" class="facetRemove plain red">[x]</a></span>
+                            $if header == 'has_fulltext':
+                                $fulltext_names.get(k, '')
+                            $elif header == 'public_scan_b':
+                                $if display == 'true':
+                                    <a href="/read" title="$_('Explore Classic eBooks')">$_('Only Classic eBooks')</a>
+                                $else:
+                                    Classic eBooks hidden
+                            $elif header == 'subject_facet':
+                                <a href="/subjects/$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
+                            $elif header == 'person_facet':
+                                <a href="/subjects/person:$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
+                            $elif header == 'place_facet':
+                                <a href="/subjects/place:$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
+                            $elif header == 'time_facet':
+                                <a href="/subjects/time:$display.replace(' ', '_')" title="$_('Explore books about %(subject)s', subject=display)" class="facetSubject">$display</a>
+                            $elif header == 'first_publish_year':
+                                <span title="$_('First published in')">$display</span>
+                            $elif header == 'language':
+                                <span title="$_('Written in')">$display</span>
+                            $elif header == 'publisher_facet':
+                                <span title="$_('Published by')">$display</span>
+                            $elif header == 'author_key':
+                                <span title="$_('Author')">$display</span>
+                            <span style="padding-right:15px;"><a href="$del_facet_url(header, k)" title="$_('Click to remove this facet')" class="facetRemove plain red">[x]</a></span>
                 </strong></span></p>
             $var title: $_('%(title)s - search', title=', '.join(title))
 
